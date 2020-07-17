@@ -59,7 +59,6 @@ app.get('/callback',function(req,res){
 })
 
 app.get('/room',function(req,res){
-  console.log(req.cookies.name+":"+req.cookies.id)
   res.render('room.ejs')
 })
 
