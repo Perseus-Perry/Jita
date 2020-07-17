@@ -18,11 +18,9 @@ app.use(express.static("public"));
 
 clientID = '887619d6fc0640ef8b503a7356e67d7a'
 secretKey = 'DwaEsXggfd6qaGdumzKc25KeMMjkLeM3cCP0hboH'
-b64 = 'ODg3NjE5ZDZmYzA2NDBlZjhiNTAzYTczNTZlNjdkN2E6RHdhRXNYZ2dmZDZxYUdkdW16S2MyNUtlTU1qa0xlTTNjQ1AwaGJvSA=='
-
 
 usersConnected = 0
- 
+
 app.get('/',function(req,res){
   if(req.query.auth==='true'){
 
