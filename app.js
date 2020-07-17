@@ -4,6 +4,9 @@ const ejs = require("ejs");
 const https = require('https')
 const app = express();
 var esso = require('eve-sso-simple');
+var http = require('http').createServer(app);
+
+var io = require('socket.io')(http);
 
 
 app.use(bodyParser.urlencoded({
@@ -16,13 +19,15 @@ secretKey = 'DwaEsXggfd6qaGdumzKc25KeMMjkLeM3cCP0hboH'
 b64 = 'ODg3NjE5ZDZmYzA2NDBlZjhiNTAzYTczNTZlNjdkN2E6RHdhRXNYZ2dmZDZxYUdkdW16S2MyNUtlTU1qa0xlTTNjQ1AwaGJvSA=='
 
 
-app.get('/',function(req,res){
-  if(req.params.auth==='true'){
+usersConnected = 0
 
-    res.send("authenticated")
+app.get('/',function(req,res){
+  if(req.query.auth==='true'){
+
+    res.render('index.ejs',{authed:true,usersCount:usersConnected})
   }
   else{
-        res.render('index.ejs')
+        res.render('index.ejs',{authed:false,usersCount:usersConnected})
   }
 })
 
@@ -49,7 +54,28 @@ app.get('/callback',function(req,res){
 
 })
 
+app.get('/room',function(req,res){
+  res.render('room.ejs')
+})
 
-app.listen(process.env.PORT || 80, function () {
+
+io.on('connection', (socket) => {
+  usersConnected+=1;
+});
+
+
+
+io.on('connection', (socket) => {
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });
+  socket.on('disconnect', () => {
+    usersConnected-=1;
+    console.log(socket.id + ' disconnected')
+    });
+});
+
+
+http.listen(process.env.PORT || 80, function () {
     console.log("Server started");
 });

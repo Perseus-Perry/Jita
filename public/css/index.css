@@ -6,6 +6,10 @@ src: url('exodar.ttf') format('truetype');
 body{
   margin: 0;
   background-color: #080808;
+  -webkit-user-select: none; /* Safari */
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* IE10+/Edge */
+user-select: none; /* Standard */
 }
 
 .centerdiv{
@@ -16,17 +20,9 @@ body{
   margin-top: 5%;
   margin-bottom: 0;
 }
-
-.bottomdiv{
-  margin-top: 0;
-  padding-bottom: 0;
-  text-align: center;
-  width:100%;
-  height: 40%;
-}
 .title{
   margin-bottom: 0;
-  font-size: 1250%;
+  font-size: 17vw;
   font-family:'Exodar';
 color: #1abc9c;
   font-weight: 100;
@@ -34,10 +30,18 @@ color: #1abc9c;
 }
 
 .subtitle{
-  display: block !important;
   letter-spacing: 0.5rem;
   font-family: 'Montserrat', sans-serif;
-  font-size: 125%;
+  font-size: 2vw;
+  color: white;
+  font-weight: 100;
+  text-rendering: optimizeLegibility;
+}
+
+.para{
+  letter-spacing: 0.25rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1vw;
   color: white;
   font-weight: 100;
   text-rendering: optimizeLegibility;
@@ -45,4 +49,25 @@ color: #1abc9c;
 
 img{
   display: block !im;
+}
+
+
+.joinButton {
+	background-color:transparent;
+	border-radius:7px;
+	border:1px solid #ffffff;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+  font-family: 'Montserrat', sans-serif;
+	font-size:18px;
+	padding:10px 31px;
+	text-decoration:none;
+}
+.joinButton:hover {
+	background-color:transparent;
+}
+.joinButton:active {
+	position:relative;
+	top:1px;
 }

@@ -11,7 +11,12 @@
   <div class='centerdiv'>
     <h1 class='title'>JITA.CHAT</h1>
     <h3 class='subtitle'>THE EVE ONLINE CHATROOM</h3>
+    <h6 class='para'>Capsuleers Online : <%=usersCount%></h6>
+    <% if(!authed){%>
     <a href="/auth"><img src="/img/sso.png" /></a>
+    <%}%>
+    <%if(authed){%>
+    <a href="#" class="joinButton">JOIN ROOM</a> <%}%>
   </div>
 </body>
 

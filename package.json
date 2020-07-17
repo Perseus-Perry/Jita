@@ -14,6 +14,7 @@
     "eve-sso-simple": "^2.0.1",
     "express": "^4.17.1",
     "passport": "^0.4.1",
-    "passport-eveonline-sso": "github:eve-scout/passport-eveonline-sso"
+    "passport-eveonline-sso": "github:eve-scout/passport-eveonline-sso",
+    "socket.io": "^2.3.0"
   }
 }
