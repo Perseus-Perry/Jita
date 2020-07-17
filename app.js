@@ -5,13 +5,15 @@ const https = require('https')
 const app = express();
 var esso = require('eve-sso-simple');
 var http = require('http').createServer(app);
-
 var io = require('socket.io')(http);
+var cookieParser = require('cookie-parser');
+
 
 
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(cookieParser());
 app.use(express.static("public"));
 
 clientID = '887619d6fc0640ef8b503a7356e67d7a'
@@ -47,7 +49,9 @@ app.get('/callback',function(req,res){
           client_secret: secretKey,
           }, req, res,
           (accessToken, charToken) => {
-              res.redirect('/?auth=true')
+            res.cookie('name',charToken.CharacterName)
+            res.cookie('id',charToken.CharacterID)
+            res.redirect('/?auth=true')
           }
       );
 
@@ -55,6 +59,7 @@ app.get('/callback',function(req,res){
 })
 
 app.get('/room',function(req,res){
+  console.log(req.cookies.name+":"+req.cookies.id)
   res.render('room.ejs')
 })
 
@@ -66,13 +71,17 @@ io.on('connection', (socket) => {
 
 
 io.on('connection', (socket) => {
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
+
+
+  socket.on('chat message', (msg,name) => {
+    io.emit('chat message', msg , name);
   });
+
   socket.on('disconnect', () => {
     usersConnected-=1;
-    console.log(socket.id + ' disconnected')
-    });
+  });
+
+
 });
 
 
