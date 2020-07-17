@@ -20,7 +20,7 @@ clientID = '887619d6fc0640ef8b503a7356e67d7a'
 secretKey = 'DwaEsXggfd6qaGdumzKc25KeMMjkLeM3cCP0hboH'
 
 usersConnected = 0
-
+  setInterval(doStuff, 1000); //time is in ms
 app.get('/',function(req,res){
   if(req.query.auth==='true'){
 
@@ -73,12 +73,21 @@ io.on('connection', (socket) => {
     io.emit('chat message', msg , name ,id);
   });
 
+  socket.on('newUserConnected',(name,id) => {
+    io.emit('addMember',name,id);
+  });
   socket.on('disconnect', () => {
     usersConnected-=1;
+    //console.log(socket.id)
   });
 
 
+
 });
+  function doStuff() {
+    io.emit('onlineCount',usersConnected);
+
+  }
 
 
 http.listen(process.env.PORT || 80, function () {

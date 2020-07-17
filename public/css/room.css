@@ -34,7 +34,7 @@ form {
   clear: both;
   margin-left: 0;
   font-family: 'evesans' , sans;
-  font-weight: 100;
+  font-weight: 200;
   letter-spacing: 0.025rem;
   padding: 5px 10px;
   background-color: transparent;
@@ -52,6 +52,10 @@ form {
   border-style :ridge;
   border-color: #0f1011;
   border-width: 0 2px;
+}
+
+.secondBar{
+  padding-right: 5px;
 }
 
 hr{
@@ -81,7 +85,7 @@ hr{
   border-color: #0f1011;
   margin-bottom: 1vh;
   border-width: 2px;
-
+  overflow: auto;
 }
 
 .messageBox{
@@ -130,4 +134,44 @@ img,p{
   display: block;
   margin-top: 5px;
   margin-left: 10px;
+}
+
+.normalText{
+  color: white;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 100;
+}
+
+.user{
+  float:right;
+  display: inline;
+  max-width: 80%;
+max-height: 80%;
+margin-right: 5px;
+}
+
+.onlineCount{
+  display: inline;
+  float:right;
+}
+
+.member {
+  clear: both;
+  margin-left: 0;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 200;
+  letter-spacing: 0.025rem;
+  padding: 5px 0;
+  background-color: transparent;
+  color:white;
+  height: 50px;
+}
+
+.memberText{
+  margin-top: 12px;
+  margin-left: 10px;
+}
+
+hr{
+  clear: both;
 }
