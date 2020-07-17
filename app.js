@@ -17,11 +17,21 @@ b64 = 'ODg3NjE5ZDZmYzA2NDBlZjhiNTAzYTczNTZlNjdkN2E6RHdhRXNYZ2dmZDZxYUdkdW16S2MyN
 
 
 app.get('/',function(req,res){
+  if(req.params.auth==='true'){
+
+    res.send("authenticated")
+  }
+  else{
+        res.render('index.ejs')
+  }
+})
+
+app.get('/auth',function(req,res){
   esso.login(
         {
             client_id: clientID,
             client_secret: secretKey,
-            redirect_uri: 'http://localhost/callback',
+            redirect_uri: 'http://localhost/callback/',
             scope: ''
         }, res);
 })
@@ -32,12 +42,13 @@ app.get('/callback',function(req,res){
           client_secret: secretKey,
           }, req, res,
           (accessToken, charToken) => {
-              res.render('index.js',{charToken.CharacterName,charToken.CharacterID})
+              res.redirect('/?auth=true')
           }
       );
 
 
 })
+
 
 app.listen(process.env.PORT || 80, function () {
     console.log("Server started");
