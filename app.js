@@ -68,10 +68,9 @@ io.on('connection', (socket) => {
 
 
 io.on('connection', (socket) => {
- 
 
-  socket.on('chat message', (msg,name) => {
-    io.emit('chat message', msg , name);
+  socket.on('chat message', (msg,name,id) => {
+    io.emit('chat message', msg , name ,id);
   });
 
   socket.on('disconnect', () => {

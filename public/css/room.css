@@ -1,3 +1,8 @@
+@font-face {
+font-family: 'evesans';
+src: url('eve-regular.otf') format('opentype');
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,6 +11,9 @@
 
 body {
   font: 13px Helvetica, Arial;
+  margin: 0;
+  background-color: #020202;
+
 }
 
 form {
@@ -16,30 +24,110 @@ form {
   width: 100%;
 }
 
-form input {
-  border: 0;
-  padding: 10px;
-  width: 90%;
-  margin-right: 0.5%;
-}
-
-form button {
-  width: 9%;
-  background: rgb(130, 224, 255);
-  border: none;
-  padding: 10px;
-}
 
 #messages {
   list-style-type: none;
-  margin: 0;
   padding: 0;
 }
 
-#messages li {
+.msg {
+  clear: both;
+  margin-left: 0;
+  font-family: 'evesans' , sans;
+  font-weight: 100;
+  letter-spacing: 0.025rem;
   padding: 5px 10px;
+  background-color: transparent;
+  color:white;
 }
 
-#messages li:nth-child(odd) {
-  background: #eee;
+
+
+
+.topbar{
+  background-color: #020202;
+  height: 3vh;
+  width: 100vw;
+  margin: 0;
+  border-style :ridge;
+  border-color: #0f1011;
+  border-width: 0 2px;
+}
+
+hr{
+  height: 2px;
+  background-color:#0f1011;
+  border: none;
+}
+
+.chatBox{
+  float:left;
+  background-color: #080808;
+  width: 80%;
+  height: 79vh;
+  border-style :ridge;
+  border-color: #0f1011;
+  border-width: 2px;
+  margin-bottom: 1vh;
+  overflow-y: auto;
+}
+
+.memberList{
+  float:right;
+  height: 79vh;
+  width: 19.5%;
+  background-color: #080808;
+  border-style: ridge;
+  border-color: #0f1011;
+  margin-bottom: 1vh;
+  border-width: 2px;
+
+}
+
+.messageBox{
+  text-align: center;
+  height: 14vh;
+}
+
+textarea{
+  color: white;
+  outline: none;
+  background-color: #080808;
+  resize: none;
+  height: 100%;
+  width: 100vw;
+  border-color: #0f1011;
+  border-style: ridge;
+}
+
+form{
+  border-color: #0f1011;
+  border-width: 2px;
+  height: 18%;
+  width: 100vw;
+}
+
+.imageBox{
+display: inline;
+
+}
+.potrait{
+  float: left;
+  height: 40px;
+  width: 40px;
+  border-style: ridge;
+  border-color: #0f1011;
+  border-width: 2px;
+  margin-right: 10px;
+}
+
+img,p{
+  display: inline;
+}
+
+.msgText{
+  overflow: hidden;
+  display: block;
+  margin-top: 5px;
+  margin-left: 10px;
 }

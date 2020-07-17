@@ -7,12 +7,25 @@
 </head>
 
 <body>
-  <ul id="messages"></ul>
-  <form action="">
-    <input id="m" autocomplete="off" /><button>Send</button>
-  </form>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <div class='topbar'>
+  </div>
+  <hr>
+  <div class='topbar'>
+  </div>
+  <div class='chatBox'>
 
+  </div>
+  <div class='memberList'>
+  </div>
+  <div class='messageBox'>
+    <form action='' id='message'>
+      <textarea id='m' autocomplete="off"></textarea>
+    </form>
+  </div>
+
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="/js/socket.io.js"></script>
   <script src="/js/chat.js"></script>
 
