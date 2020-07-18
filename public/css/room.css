@@ -74,6 +74,7 @@ hr{
   border-width: 2px;
   margin-bottom: 1vh;
   overflow-y: auto;
+  padding-bottom: 25px;
 }
 
 .memberList{
@@ -204,4 +205,11 @@ div.editable {
 a,a:visited,a:hover,a:active{
   text-decoration: none;
   color:yellow;
+}
+
+img{
+  -webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+ user-select: none;
 }

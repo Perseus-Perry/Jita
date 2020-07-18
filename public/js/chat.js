@@ -1,6 +1,9 @@
 var name = getCookie('name')
 var id = getCookie('id')
 
+
+var forbiddenTags = [];
+
 $('.editable').each(function(){
     this.contentEditable = true;
 });
@@ -14,8 +17,13 @@ $(function () {
 
  $('form').submit(function(e){
    e.preventDefault(); // prevents page reloading
+   //remove forbiddenInputs
+
+     $('#m').html(replaceAll($('#m').html()));
+     if ($('#m').html() == ''){
+       return;
+     }
    socket.emit('chat message', $('#m').html() , name , id );
-   console.log($('#m').html()) ;
    $('#m').html('');
    return false;
  });
@@ -46,7 +54,7 @@ function getCookie(name) {
 
 $('#message').keypress(function(event) {
 
-    if (event.keyCode == 13 || event.which == 13) {
+    if (event.keyCode == 13 && !event.shiftKey) {
       event.preventDefault();
       $('#message').submit();
       event.preventDefault();
@@ -70,4 +78,10 @@ function generateMemberDiv(name,id){
 
 function onDrag(ev){
   ev.dataTransfer.setData("text", 'lol');
+}
+
+function replaceAll(str) {
+  var anchorTagsRemoved = str.replace(/<img.*>.*?<\/img>/ig,'');
+  anchorTagsRemoved = str.replace(/<div.*>.*?<\/div>/ig,'');
+  return anchorTagsRemoved;
 }
