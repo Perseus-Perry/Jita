@@ -19,7 +19,9 @@ app.use(express.static("public"));
 clientID = '887619d6fc0640ef8b503a7356e67d7a'
 secretKey = 'DwaEsXggfd6qaGdumzKc25KeMMjkLeM3cCP0hboH'
 
-usersConnected = 0
+usersConnected = 0;
+userList = [];
+
   setInterval(doStuff, 1000); //time is in ms
 app.get('/',function(req,res){
   if(req.query.auth==='true'){
@@ -74,11 +76,16 @@ io.on('connection', (socket) => {
   });
 
   socket.on('newUserConnected',(name,id) => {
-    io.emit('addMember',name,id);
+    socket.id = name;
+    user = {name:name,id:id};
+    userList.push(user);
+    userList = userList.sort(function(a,b) { return a.name.localeCompare(b.name)});
+    io.emit('updateMemberList',userList);
   });
   socket.on('disconnect', () => {
     usersConnected-=1;
-    //console.log(socket.id)
+    removeElement(socket.id);
+    io.emit('userDisconnected',socket.id);
   });
 
 
@@ -88,6 +95,19 @@ io.on('connection', (socket) => {
     io.emit('onlineCount',usersConnected);
 
   }
+
+  function removeElement(name) {
+    index = -1
+    len = userList.length;
+    for(var i=0;i<len;i++){
+      if(userList[i].name == name){
+        index = i
+      }
+    }
+    if (index > -1) {
+        userList.splice(index, 1);
+    }
+}
 
 
 http.listen(process.env.PORT || 80, function () {

@@ -17,13 +17,18 @@ $(function () {
    $('.chatBox').append(toAdd);
  });
  socket.on('onlineCount',function(onlineCount){
-   console.log(onlineCount);
    $('.onlineCount').text(onlineCount);
  });
- socket.on('addMember',function(name,id){
-    var div = generateMemberDiv(name,id);
-    $('.memberList').append(div);
- });
+ socket.on('updateMemberList',function(userList){
+   $('.memberList').empty();
+    userList.forEach((user) => {
+      var div = generateMemberDiv(user.name,user.id);
+      $('.memberList').append(div);
+    });
+  });
+ socket.on('userDisconnected',function(name){
+   $('p:contains('+unescape(name)+')').parents().eq(1).remove();
+ })
 });
 
 function getCookie(name) {
