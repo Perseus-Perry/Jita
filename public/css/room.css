@@ -153,6 +153,16 @@ max-height: 80%;
 margin-right: 5px;
 }
 
+.gear{
+  float:left;
+  display: inline;
+  max-width: 80%;
+max-height: 80%;
+margin-left: 5px;
+margin-right: 5px;
+}
+
+
 .onlineCount{
   display: inline;
   float:right;
