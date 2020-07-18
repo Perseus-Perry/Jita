@@ -177,3 +177,31 @@ margin-right: 5px;
 hr{
   clear: both;
 }
+
+.name{
+  font-family: 'evesans' , sans;
+  color : yellow;
+}
+
+div.editable {
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    color: white;
+    outline: none;
+    background-color: #080808;
+    resize: none;
+    height: 100%;
+    width: 100vw;
+    border-color: #0f1011;
+    border-style: ridge;
+    padding-top: 0.75%;
+    padding-left: 0.5%;
+    text-align: left;
+}
+
+a,a:visited,a:hover,a:active{
+  text-decoration: none;
+  color:yellow;
+}

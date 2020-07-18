@@ -1,15 +1,22 @@
 var name = getCookie('name')
 var id = getCookie('id')
 
-
+$('.editable').each(function(){
+    this.contentEditable = true;
+});
 
 $(function () {
  var socket = io();
  socket.emit('newUserConnected',name,id);
+
+
+
+
  $('form').submit(function(e){
    e.preventDefault(); // prevents page reloading
-   socket.emit('chat message', $('#m').val() , name , id );
-   $('#m').val('');
+   socket.emit('chat message', $('#m').html() , name , id );
+   console.log($('#m').html()) ;
+   $('#m').html('');
    return false;
  });
  socket.on('chat message', function(msg,name,id){
@@ -50,7 +57,7 @@ $('#message').keypress(function(event) {
 
 function generateDiv(name,id , msg){
   src = 'https://images.evetech.net/characters/'+id+'/portrait';
-  var div = '<div class="msg"><div><img class="potrait" src="'+src+'" /></div><div class="msgText"><p>'+ unescape(name) + " > <span class='normalText'>" + msg + '</span></p></div></div>';
+  var div = '<div class="msg"><div><img class="potrait" src="'+src+'" /></div><div class="msgText"><p><a href="Contrum Inkunen"><span class="name">'+ unescape(name) + "</span></a>  > <span class='normalText'>" + msg + '</span></p></div></div>';
   return div;
 }
 
@@ -59,4 +66,8 @@ function generateMemberDiv(name,id){
   src = 'https://images.evetech.net/characters/'+id+'/portrait';
   var div = '<div class="member"><div><img class="potrait" src="'+src+'" /></div><div class="memberText"><p>'+unescape(name)+'</p></div><hr></div>';
   return div;
+}
+
+function drop(event){
+  //get last child
 }

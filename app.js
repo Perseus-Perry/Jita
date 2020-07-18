@@ -64,7 +64,7 @@ app.get('/room',function(req,res){
 
 
 io.on('connection', (socket) => {
-  usersConnected+=1;
+
 });
 
 
@@ -92,7 +92,7 @@ io.on('connection', (socket) => {
 
 });
   function doStuff() {
-    io.emit('onlineCount',usersConnected);
+    io.emit('onlineCount',userList.length);
 
   }
 
