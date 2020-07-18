@@ -57,7 +57,7 @@ $('#message').keypress(function(event) {
 
 function generateDiv(name,id , msg){
   src = 'https://images.evetech.net/characters/'+id+'/portrait';
-  var div = '<div class="msg"><div><img class="potrait" src="'+src+'" /></div><div class="msgText"><p><a href="Contrum Inkunen" class="name">'+ unescape(name) + "</a>  > <span class='normalText'>" + msg + '</span></p></div></div>';
+  var div = '<div class="msg"><div><img class="potrait" src="'+src+'" /></div><div class="msgText"><p><a href="#" ondrag="onDrag(event)" class="name">'+ unescape(name) + "</a>  > <span class='normalText'>" + msg + '</span></p></div></div>';
   return div;
 }
 
@@ -68,6 +68,6 @@ function generateMemberDiv(name,id){
   return div;
 }
 
-function drop(event){
-  //get last child
+function onDrag(ev){
+  ev.dataTransfer.setData("text", 'lol');
 }
