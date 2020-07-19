@@ -1,6 +1,6 @@
 var name = getCookie('name')
 var id = getCookie('id')
-
+var startTime;
 
 var forbiddenTags = [];
 
@@ -11,9 +11,6 @@ $('.editable').each(function(){
 $(function () {
  var socket = io();
  socket.emit('newUserConnected',name,id);
-
-
-
 
  $('form').submit(function(e){
    e.preventDefault(); // prevents page reloading
@@ -57,6 +54,15 @@ $(function () {
 
 
  });
+
+ socket.on('ping',function(){
+   socket.emit('pong');
+ })
+
+ socket.on('updatePing',function(latency){
+    $('.ping').html(latency+" ms");
+ })
+
  socket.on('onlineCount',function(onlineCount){
    $('.onlineCount').text(onlineCount);
  });

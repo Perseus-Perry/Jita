@@ -204,6 +204,12 @@ margin-right: 5px;
   float:right;
 }
 
+.ping{
+  display: inline;
+  float:right;
+}
+
+
 .member {
   clear: both;
   margin-left: 0;

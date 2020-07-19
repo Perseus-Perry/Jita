@@ -13,10 +13,13 @@ app.use(express.static("public"));
 clientID = '887619d6fc0640ef8b503a7356e67d7a'
 secretKey = 'DwaEsXggfd6qaGdumzKc25KeMMjkLeM3cCP0hboH'
 
+var startTime;
 usersConnected = 0;
 userList = [];
 
-  setInterval(doStuff, 1000); //time is in ms
+setInterval(sendOnlineCount, 1000); //time is in ms
+setInterval(sendPing, 10000); //time is in ms
+
 app.get('/',function(req,res){
   if(req.query.auth==='true'){
 
@@ -79,14 +82,26 @@ io.on('connection', (socket) => {
     removeElement(socket.id);
     io.emit('userDisconnected',socket.id);
   });
-
-
+  socket.on('pong',function(){
+    var date = new Date();
+    var time = date.getMilliseconds();
+    var latency = time-startTime;
+    socket.emit('updatePing',latency);
+  })
 
 });
-  function doStuff() {
+  function sendOnlineCount() {
     io.emit('onlineCount',userList.length);
 
   }
+
+  function sendPing() {
+    var date = new Date();
+    startTime = date.getMilliseconds();
+    io.emit('ping',userList.length);
+  }
+
+
 
   function removeElement(socketID) {
     index = -1
