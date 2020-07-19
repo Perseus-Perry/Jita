@@ -1,4 +1,4 @@
-runtime: nodejs10 # or nodejs10
+runtime: nodejs10
 handlers:
 - url: /.*
   secure: always

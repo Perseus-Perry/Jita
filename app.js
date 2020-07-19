@@ -3,7 +3,7 @@ const ejs = require("ejs");
 const app = express();
 var esso = require('eve-sso-simple');
 var http = require('http').createServer(app);
-var io = require('socket.io')(http,{pingInterval:2500,pingTimeout:2500});
+var io = require('socket.io')(http,{pingInterval:2500,pingTimeout:5000});
 var cookieParser = require('cookie-parser');
 
 

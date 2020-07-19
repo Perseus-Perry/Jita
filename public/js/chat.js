@@ -9,8 +9,15 @@ $('.editable').each(function(){
 });
 
 $(function () {
- var socket = io();
- socket.emit('newUserConnected',name,id);
+ var socket = io({
+  'reconnection': true,
+  'reconnectionDelay': 1000,
+  'reconnectionAttempts': 25
+});
+
+socket.on('connect',function(){
+  socket.emit('newUserConnected',name,id);
+})
 
  $('form').submit(function(e){
    e.preventDefault(); // prevents page reloading
