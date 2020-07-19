@@ -23,13 +23,39 @@ $(function () {
      if ($('#m').html() == ''){
        return;
      }
-   socket.emit('chat message', $('#m').html() , name , id );
+     var scroll = false;
+     var toAdd = generateDiv(name,id, $('#m').html());
+     var chatbox = document.getElementById('chatBox');
+     if (chatbox.scrollTop >= (chatbox.scrollHeight - chatbox.offsetHeight))
+     {
+       scroll = true;
+     }
+     $('.chatBox').append(toAdd);
+     if(scroll){
+       chatbox.scrollTop = chatbox.scrollHeight;
+     }
+   socket.emit('add chat message', $('#m').html() , name , id );
    $('#m').html('');
+
    return false;
  });
- socket.on('chat message', function(msg,name,id){
+ socket.on('chat message', function(msg,name,id,socketID){
+   if(socketID == socket.id){
+     return;
+   }
+   var scroll = false;
    var toAdd = generateDiv(name,id,msg);
+   var chatbox = document.getElementById('chatBox');
+   if (chatbox.scrollTop >= (chatbox.scrollHeight - chatbox.offsetHeight))
+   {
+     scroll = true;
+   }
    $('.chatBox').append(toAdd);
+   if(scroll){
+     chatbox.scrollTop = chatbox.scrollHeight;
+   }
+
+
  });
  socket.on('onlineCount',function(onlineCount){
    $('.onlineCount').text(onlineCount);
@@ -37,12 +63,12 @@ $(function () {
  socket.on('updateMemberList',function(userList){
    $('.memberList').empty();
     userList.forEach((user) => {
-      var div = generateMemberDiv(user.name,user.id);
+      var div = generateMemberDiv(user.name,user.id,user.socketID);
       $('.memberList').append(div);
     });
   });
- socket.on('userDisconnected',function(name){
-   $('p:contains('+unescape(name)+')').parents().eq(1).remove();
+ socket.on('userDisconnected',function(socketID){
+   $('p:contains('+socketID+')').parents().eq(1).remove();
  })
 });
 
@@ -70,9 +96,9 @@ function generateDiv(name,id , msg){
 }
 
 
-function generateMemberDiv(name,id){
+function generateMemberDiv(name,id,socketID){
   src = 'https://images.evetech.net/characters/'+id+'/portrait';
-  var div = '<div class="member"><div><img class="potrait" src="'+src+'" /></div><div class="memberText"><p>'+unescape(name)+'</p></div><hr></div>';
+  var div = '<div class="member"><a href="#" ondrag="onDrag(event)"><div><img class="potrait" ondragstart="return false;" src="'+src+'" /></div><div class="memberText name"><p>'+unescape(name)+'</p></a><p style="visibility:hidden;position:absolute;">'+socketID+'</p></div></a><hr></div>';
   return div;
 }
 

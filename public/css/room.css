@@ -3,6 +3,42 @@ font-family: 'evesans';
 src: url('eve-regular.otf') format('opentype');
 }
 
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #242424;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #242424;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #242424;
+}
+::-webkit-scrollbar-track {
+  background: #1c1c1c;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #1c1c1c;
+}
+::-webkit-scrollbar-track:active {
+  background: #1c1c1c;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+
 * {
   margin: 0;
   padding: 0;
@@ -178,9 +214,12 @@ margin-right: 5px;
   background-color: transparent;
   color:white;
   height: 50px;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .memberText{
+  white-space: nowrap;
   margin-top: 12px;
   margin-left: 10px;
 }
@@ -191,7 +230,7 @@ hr{
 
 .name{
   font-family: 'evesans' , sans;
-  color : yellow;
+  color : #1abc9c !important;
 }
 
 div.editable {
@@ -214,12 +253,15 @@ div.editable {
 
 a,a:visited,a:hover,a:active{
   text-decoration: none;
-  color:yellow;
+  font-family: 'evesans' , sans;
+  color : #1abc9c !important;
 }
 
 img{
+   user-drag : none;
   -webkit-user-select: none;
 -moz-user-select: none;
 -ms-user-select: none;
  user-select: none;
+
 }

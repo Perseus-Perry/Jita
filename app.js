@@ -1,18 +1,12 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const ejs = require("ejs");
-const https = require('https')
 const app = express();
 var esso = require('eve-sso-simple');
 var http = require('http').createServer(app);
-var io = require('socket.io')(http);
+var io = require('socket.io')(http,{pingInterval:2500,pingTimeout:2500});
 var cookieParser = require('cookie-parser');
 
 
-
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
 app.use(cookieParser());
 app.use(express.static("public"));
 
@@ -26,10 +20,10 @@ userList = [];
 app.get('/',function(req,res){
   if(req.query.auth==='true'){
 
-    res.render('index.ejs',{authed:true,usersCount:usersConnected})
+    res.render('index.ejs',{authed:true,usersCount:userList.length})
   }
   else{
-        res.render('index.ejs',{authed:false,usersCount:usersConnected})
+        res.render('index.ejs',{authed:false,usersCount:userList.length})
   }
 })
 
@@ -38,7 +32,7 @@ app.get('/auth',function(req,res){
         {
             client_id: clientID,
             client_secret: secretKey,
-            redirect_uri: 'http://localhost/callback/',
+            redirect_uri: 'http://www.jita.chat/callback/',
             scope: ''
         }, res);
 })
@@ -71,19 +65,17 @@ io.on('connection', (socket) => {
 
 io.on('connection', (socket) => {
 
-  socket.on('chat message', (msg,name,id) => {
-    io.emit('chat message', msg , name ,id);
+  socket.on('add chat message', (msg,name,id) => {
+    io.emit('chat message', msg , name , id , socket.id);
   });
 
   socket.on('newUserConnected',(name,id) => {
-    socket.id = name;
-    user = {name:name,id:id};
+    user = {socketID:socket.id,name:name,id:id};
     userList.push(user);
     userList = userList.sort(function(a,b) { return a.name.localeCompare(b.name)});
     io.emit('updateMemberList',userList);
   });
   socket.on('disconnect', () => {
-    usersConnected-=1;
     removeElement(socket.id);
     io.emit('userDisconnected',socket.id);
   });
@@ -96,11 +88,11 @@ io.on('connection', (socket) => {
 
   }
 
-  function removeElement(name) {
+  function removeElement(socketID) {
     index = -1
     len = userList.length;
     for(var i=0;i<len;i++){
-      if(userList[i].name == name){
+      if(userList[i].socketID == socketID){
         index = i
       }
     }
@@ -110,6 +102,6 @@ io.on('connection', (socket) => {
 }
 
 
-http.listen(process.env.PORT || 80, function () {
+http.listen(process.env.PORT || 8080, function () {
     console.log("Server started");
 });

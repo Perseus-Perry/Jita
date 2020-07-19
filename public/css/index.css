@@ -1,6 +1,10 @@
+
 @font-face {
-font-family: 'Exodar';
-src: url('exodar.ttf') format('truetype');
+    font-family: 'Exodar';
+    src: url('exodar-webfont.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+
 }
 
 body{
