@@ -1,122 +1,270 @@
 const express = require("express");
+var randomstring = require("randomstring");
 const ejs = require("ejs");
+const mongoose = require('mongoose')
 const app = express();
 var esso = require('eve-sso-simple');
 var http = require('http').createServer(app);
-var io = require('socket.io')(http,{pingInterval:2500,pingTimeout:5000});
+var io = require('socket.io')(http, {
+  pingInterval: 2500,
+  pingTimeout: 5000
+});
 var cookieParser = require('cookie-parser');
 
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
-app.use(cookieParser());
-app.use(express.static("public"));
+app.use(cookieParser()); app.use(express.static("public"));
 
-clientID = '887619d6fc0640ef8b503a7356e67d7a'
-secretKey = 'DwaEsXggfd6qaGdumzKc25KeMMjkLeM3cCP0hboH'
+var clientID = "887619d6fc0640ef8b503a7356e67d7a";
+var secretKey = "DwaEsXggfd6qaGdumzKc25KeMMjkLeM3cCP0hboH";
+var banDbUri = "mongodb+srv://admin:iH57rx3g6BUtVkng@cluster0.ixmb6.mongodb.net/Users?retryWrites=true/BannedUsers";
+var reportDbUri = "mongodb+srv://admin:iH57rx3g6BUtVkng@cluster0.ixmb6.mongodb.net/Users?retryWrites=true/ReportedUsers";
+var usersConnected = 0, userList = [];
 
-var startTime;
-usersConnected = 0;
-userList = [];
+const bannedUsersDB = mongoose.createConnection(banDbUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+const reportedUsersDB = mongoose.createConnection(banDbUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+var bannedUserSchema = mongoose.Schema({
+      name: String,
+      id : String
+});
+
+var reportedUserSchema = mongoose.Schema({
+      _id:String,
+      reportedName : String,
+      reportedID : String,
+      reporterName:String,
+      reporterID:String,
+      message:String
+});
+
+var BannedUser = bannedUsersDB.model("BannedUser", bannedUserSchema);
+var ReportedUser = reportedUsersDB.model("ReportedUser", reportedUserSchema);
 
 setInterval(sendOnlineCount, 1000); //time is in ms
-setInterval(sendPing, 10000); //time is in ms
 
-app.get('/',function(req,res){
-  if(req.query.auth==='true'){
+app.get('/', function(req, res) {
+  if(req.query.auth === 'true') {
 
-    res.render('index.ejs',{authed:true,usersCount:userList.length})
+    res.render('index.ejs', {
+      authed: true,
+      usersCount: userList.length
+    });
+  } else {
+    res.render('index.ejs', {
+      authed: false,
+      usersCount: userList.length
+    });
   }
-  else{
-        res.render('index.ejs',{authed:false,usersCount:userList.length})
-  }
-})
+});
 
-app.get('/auth',function(req,res){
-  esso.login(
-        {
-            client_id: clientID,
-            client_secret: secretKey,
-            redirect_uri: 'http://www.jita.chat/callback/',
-            scope: ''
-        }, res);
-})
+app.get('/auth', function(req, res) {
+  esso.login({
+    client_id: clientID,
+    client_secret: secretKey,
+    redirect_uri: 'http://www.jita.chat/callback/',
+    scope: ''
+  }, res);
+});
 
-app.get('/callback',function(req,res){
+app.get('/callback', function(req, res) {
   esso.getTokens({
-          client_id: clientID,
-          client_secret: secretKey,
-          }, req, res,
-          (accessToken, charToken) => {
-            res.cookie('name',charToken.CharacterName)
-            res.cookie('id',charToken.CharacterID)
-            res.redirect('/?auth=true')
-          }
-      );
+      client_id: clientID,
+      client_secret: secretKey,
+    }, req, res,
+    (accessToken, charToken) => {
+      res.cookie('name', charToken.CharacterName)
+      res.cookie('id', charToken.CharacterID)
+      res.redirect('/?auth=true')
+    });
+});
 
+app.get('/room', function(req, res) {
+  res.render('room.ejs');
+});
 
+app.get('/rules', function(req, res) {
+  res.render('rules.ejs');
+});
+
+app.get('/banned',function(req,res){
+    res.render('banned.ejs');
 })
 
-app.get('/room',function(req,res){
-  res.render('room.ejs')
-})
+app.get('/admin-console',function(req,res){
+  ReportedUser.find({},function(err,users){
+    if(err){
+      console.log(err);
+      res.send('error');
+    }
+    else{
+      res.render('admin.ejs',{reportList:users});
 
-
-io.on('connection', (socket) => {
-
+    }
+  })
 });
 
 
+app.post('/removeReport',function(req,res){
+    idToRemove = req.query.id;
+    ReportedUser.deleteOne({_id:idToRemove},function(err){
+      if(err){
+        console.log(err);
+      }
+      res.redirect('/admin-console');
+    });
+});
+
+app.post('/banUser',function(req,res){
+    idToRemove = req.query.id;
+    var user;
+    ReportedUser.findOne({_id:idToRemove},function(err,doc){
+      if(err){
+        console.log(err);
+      }
+      else{
+        user = doc;
+
+      }
+    });
+
+
+    ReportedUser.deleteOne({_id:idToRemove},function(err){
+      if(err){
+        console.log(err);
+        return;
+      }
+      userToBan = new BannedUser({
+        name : user.reportedName,
+        id : user.reportedID
+      });
+      userToBan.save();
+        res.redirect('/admin-console');
+
+    });
+});
+
+
+http.listen(process.env.PORT || 8080, function() {
+  console.log("Server started");
+});
+
+//SOCKET.IO EVENT HANDLERS
+//
+//
+//
+//
 
 io.on('connection', (socket) => {
 
-  socket.on('add chat message', (msg,name,id) => {
-    io.emit('chat message', msg , name , id , socket.id);
+
+
+  socket.on('add chat message', (msg, name, id) => {
+    io.emit('chat message', msg, name, id, socket.id);
   });
 
-  socket.on('newUserConnected',(name,id) => {
-    user = {socketID:socket.id,name:name,id:id};
-    userList.push(user);
-    userList = userList.sort(function(a,b) { return a.name.localeCompare(b.name)});
-    io.emit('updateMemberList',userList);
+  socket.on('newUserConnected', (name, id) => {
+    banned = false;
+    //check is user is banned
+    BannedUser.findOne({'name': unescape(name)}, function(err, user) {
+      if(err)
+      {
+        console.log(err);
+      }
+      else if(user != null)
+      {
+        socket.emit('redirect',"https://jita.chat/banned");
+        banned = true;
+      }
+    });
+    if(!banned){
+    addElement(socket.id, name, id);
+    io.emit('updateMemberList', userList);
+  }
   });
+
+
   socket.on('disconnect', () => {
     removeElement(socket.id);
-    io.emit('userDisconnected',socket.id);
+    io.emit('userDisconnected', socket.id);
   });
-  socket.on('pong',function(){
-    var date = new Date();
-    var time = date.getMilliseconds();
-    var latency = time-startTime;
-    socket.emit('updatePing',latency);
+
+
+  socket.on('sendping', function() {
+    socket.emit('sendpong');
   })
 
+
+  socket.on('report', function(reportedName,reportedID,reporterName,reporterID,message) {
+
+    report = new ReportedUser({
+      _id : randomstring.generate(6),
+      reportedName:reportedName,
+      reportedID:reportedID,
+      reporterName:reporterName,
+      reporterID:reporterID,
+      message:message
+    });
+
+    report.save();
+  });
+
+
 });
-  function sendOnlineCount() {
-    io.emit('onlineCount',userList.length);
 
-  }
+//
+//
+//
+//
+//SOCKET.IO EVENT HANDLERS
 
-  function sendPing() {
-    var date = new Date();
-    startTime = date.getMilliseconds();
-    io.emit('ping',userList.length);
-  }
+//CUSTOM FUNCTIONS
 
-
-
-  function removeElement(socketID) {
-    index = -1
-    len = userList.length;
-    for(var i=0;i<len;i++){
-      if(userList[i].socketID == socketID){
-        index = i
-      }
-    }
-    if (index > -1) {
-        userList.splice(index, 1);
-    }
+function sendOnlineCount() {
+  io.emit('onlineCount', userList.length);
 }
 
 
-http.listen(process.env.PORT || 8080, function () {
-    console.log("Server started");
-});
+
+function addElement(socketID, name, id) {
+  userObject = {
+    socketID: socketID,
+    name: name,
+    id: id
+  };
+
+  userList.forEach((user) => {
+    if(user.id == userObject.id) {
+      removeElement(user.socketID);
+    }
+  });
+
+  userList.push(userObject);
+
+  userList = userList.sort(function(a, b) {
+    return a.name.localeCompare(b.name)
+  });
+}
+
+
+function removeElement(socketID) {
+  index = -1;
+  len = userList.length;
+  for(var i = 0; i < len; i++) {
+    if(userList[i].socketID == socketID) {
+      index = i;
+    }
+  }
+  if(index > -1) {
+    userList.splice(index, 1);
+  }
+}

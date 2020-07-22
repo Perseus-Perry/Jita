@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link href="/css/normalizer.css" rel="stylesheet">
+  <link href="/css/admin.css" rel="stylesheet">
+</head>
+
+<body>
+  <table class="unstyledTable">
+    <thead>
+      <tr>
+        <th>Reported</th>
+        <th>By</th>
+        <th class="msg">Text</th>
+        <th>Delete</th>
+        <th>Ban</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% reportList.forEach(function(report){ %>
+      <tr>
+        <td> <%= report.reportedName %></td>
+        <td> <%= report.reporterName %></td>
+        <td class="msg"> <%= report.message %></td>
+        <td>
+          <form action="/removeReport/?id=<%=report.id%>" method="post"><button type="submit">Delete</button></form>
+        </td>
+        <td>
+          <form action="/banUser/?id=<%=report.id%>" method="post"><button type="submit">Ban</button></form>
+        </td>
+      </tr>
+      <%})%>
+    </tbody>
+  </table>
+  <script src="/js/admin.js" />
+  </body>
+
+</html>

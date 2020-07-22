@@ -9,16 +9,26 @@
 </head>
 
 <body>
+  <script src="/js/index.js"></script>
+  <a href="https://www.patreon.com/perseus1715" target="_blank"><img class='patron' src="/img/patron.png" /></a>
+  <a href="/rules">
+    <h3 class='rules'>RULES<h3>
+  </a>
+
+
   <div class='centerdiv'>
     <h1 class='title'>JITA.CHAT</h1>
+
     <h3 class='subtitle'>THE EVE ONLINE CHATROOM</h3>
-    <h6 class='para'>Capsuleers Online : <%=usersCount%></h6>
+
+    <h6 class='para online'>Capsuleers Online : <%=usersCount%></h6>
     <% if(!authed){%>
     <a href="/auth"><img src="/img/sso.png" /></a>
     <%}%>
     <%if(authed){%>
-    <a href='/room' class="joinButton">JOIN ROOM</a> <%}%>
+    <a href='/rules' class="joinButton">JOIN ROOM</a> <%}%>
   </div>
+  <p class='normalText isk'>ISK donations to <a href="https://evewho.com/character/2116486639" target="_blank">Perry Legasov</a> are appreciated. <br><br> Contact me on :<span class="mail"> perseus1715@gmail.com</span></p>
 </body>
 
 </html>

@@ -1,0 +1,30 @@
+table.unstyledTable {
+}
+table.unstyledTable td, table.unstyledTable th {
+}
+table.unstyledTable thead {
+  background: #DDDDDD;
+}
+table.unstyledTable thead th {
+  font-weight: bold;
+}
+table.unstyledTable tfoot {
+  font-weight: bold;
+}
+table{
+  margin: 0 auto;
+  margin-top: 10%;
+  width: 100%;
+}
+
+tr{
+  text-align: center;
+}
+
+th{
+  width : 5%;
+}
+.msg{
+  width: 33%;
+  overflow: auto;
+}

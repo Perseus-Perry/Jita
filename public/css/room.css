@@ -18,10 +18,10 @@ src: url('eve-regular.otf') format('opentype');
   border-radius: 0px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #242424;
+  background: #323232;
 }
 ::-webkit-scrollbar-thumb:active {
-  background: #242424;
+  background: #f8f8ff;
 }
 ::-webkit-scrollbar-track {
   background: #1c1c1c;
@@ -49,6 +49,7 @@ body {
   font: 13px Helvetica, Arial;
   margin: 0;
   background-color: #020202;
+  overflow-x: hidden;
 
 }
 
@@ -67,6 +68,7 @@ form {
 }
 
 .msg {
+  min-height: 55px;
   clear: both;
   margin-left: 0;
   font-family: 'evesans' , sans;
@@ -75,9 +77,14 @@ form {
   padding: 5px 10px;
   background-color: transparent;
   color:white;
+  -webkit-transition: background 0.25s; /* For Safari 3.0 to 6.0 */
+  transition: background 0.25s; /* For modern browsers */
+  font-weight: 100;
 }
 
-
+.msg:hover{
+  background-color: #1a1a1a;
+}
 
 
 .topbar{
@@ -88,10 +95,12 @@ form {
   border-style :ridge;
   border-color: #0f1011;
   border-width: 0 2px;
+  vertical-align: middle;
 }
 
 .secondBar{
   padding-right: 5px;
+  vertical-align: middle;
 }
 
 hr{
@@ -176,7 +185,7 @@ img,p{
 }
 
 .normalText{
-  color: white;
+  color: #f8f8ff;
   font-family: 'Roboto Condensed', sans-serif;
   font-weight: 100;
 }
@@ -222,8 +231,13 @@ margin-right: 5px;
   height: 50px;
   overflow-x: hidden;
   overflow-y: hidden;
+  -webkit-transition: background 0.25s; /* For Safari 3.0 to 6.0 */
+  transition: background 0.25s; /* For modern browsers */
 }
 
+.member:hover{
+    background-color: #1a1a1a;
+}
 .memberText{
   white-space: nowrap;
   margin-top: 12px;
@@ -244,7 +258,7 @@ div.editable {
     height: 200px;
     border: 1px solid #ccc;
     padding: 5px;
-    color: white;
+    color: #f8f8ff;
     outline: none;
     background-color: #080808;
     resize: none;
@@ -255,6 +269,8 @@ div.editable {
     padding-top: 0.75%;
     padding-left: 0.5%;
     text-align: left;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 a,a:visited,a:hover,a:active{
@@ -270,4 +286,16 @@ img{
 -ms-user-select: none;
  user-select: none;
 
+}
+
+
+.report{
+  color:red;
+  cursor: pointer;
+  font-weight: bolder;
+}
+
+.connectionStatus{
+  margin-left : 0.1%;
+  float: left;
 }
