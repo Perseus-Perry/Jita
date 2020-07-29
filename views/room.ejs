@@ -2,52 +2,48 @@
 
 <head>
   <title>Jita Chat</title>
-  <link rel="icon" href="/img/favicon.ico">
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
 
   <link href='/css/room.css' rel='stylesheet' />
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <div class='topbar'>
+  <div class="topBar">
+    <p class="normalText onlineCountText">Online : <span class="onlineCount">0</span></p>
+  </div>
+  <div class="topBar">
+    <p class='normalText connectionStatus'>Connected</p>
     <p class='normalText ping'>Ping: calculating</p>
   </div>
-  <hr>
-  <div class='topbar secondBar'>
-    <!-- <a href="#"><img class='gear' src='/img/gear.svg' title="Channel Settings" /></a> -->
-    <!--  <a href="#"><img class='gear' src='/img/team.svg' title="Member List Settings" /></a> -->
-    <p class='normalText connectionStatus'>Connecting...</p>
-    <p class='normalText onlineCount'>0</p>
-    <img class='user' src='/img/user.svg' />
 
+  <div class="mainDiv">
+
+    <div class="chatDiv">
+
+      <div id="chatBox" class="messageDiv chatBox">
+
+      </div>
+
+      <div>
+        <form action='' id='message'>
+          <div id='m' class="textDiv" ondrop="drop(event)" contenteditable="true" data-text="Enter Message Here">
+
+          </div>
+        </form>
+
+      </div>
+
+    </div>
+
+
+    <div class="memberDiv memberList">
+    </div>
   </div>
-  <div id='chatBox' class='chatBox'>
 
-  </div>
-
-
-  <div class='memberList'>
-
-  </div>
-
-
-  <div class='messageBox'>
-    <form action='' id='message'>
-      <div id='m' class="editable" ondrop="drop(event)"></div>
-    </form>
-  </div>
-
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js" integrity="sha256-/H4YS+7aYb9kJ5OKhFYPUjSJdrtV6AeyJOtTkw6X72o=" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="/js/socket.io.js"></script>
   <script src="/js/chat.js"></script>
-
-
-
-
-
 </body>
 
-</html
+</html>
