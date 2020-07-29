@@ -1,4 +1,6 @@
+
 const express = require("express");
+var favicon = require('serve-favicon');
 var randomstring = require("randomstring");
 const ejs = require("ejs");
 const mongoose = require('mongoose')
@@ -15,13 +17,16 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
-app.use(cookieParser()); app.use(express.static("public"));
-
+app.use(cookieParser());
+app.use(express.static("public"));
+app.use('/favicon.ico', express.static('/img/favicon.ico'));
+//app.use(favicon(__dirname + '/public/img/favicon.ico'));
 var clientID = "887619d6fc0640ef8b503a7356e67d7a";
 var secretKey = "DwaEsXggfd6qaGdumzKc25KeMMjkLeM3cCP0hboH";
 var banDbUri = "mongodb+srv://admin:iH57rx3g6BUtVkng@cluster0.ixmb6.mongodb.net/Users?retryWrites=true/BannedUsers";
 var reportDbUri = "mongodb+srv://admin:iH57rx3g6BUtVkng@cluster0.ixmb6.mongodb.net/Users?retryWrites=true/ReportedUsers";
-var usersConnected = 0, userList = [];
+
+var usersConnected = 0, userList = [] , messageList=[];
 
 const bannedUsersDB = mongoose.createConnection(banDbUri, {
   useNewUrlParser: true,
@@ -147,9 +152,15 @@ app.post('/banUser',function(req,res){
         name : user.reportedName,
         id : user.reportedID
       });
+      //look for name in usersList and ban the correspoing socket id
+      userList.forEach((user) => {
+        if(unescape(user.name) === unescape(userToBan.name))
+        {
+          io.emit('ban',user.socketID);
+        }
+      });
       userToBan.save();
-        res.redirect('/admin-console');
-
+      res.redirect('/admin-console');
     });
 });
 
@@ -164,11 +175,19 @@ http.listen(process.env.PORT || 8080, function() {
 //
 //
 
+
+
 io.on('connection', (socket) => {
 
 
 
   socket.on('add chat message', (msg, name, id) => {
+    var msgObj = {
+      name : name,
+      id : id,
+      msg : msg
+    };
+    addToMessageHistory(msgObj);
     io.emit('chat message', msg, name, id, socket.id);
   });
 
@@ -189,7 +208,15 @@ io.on('connection', (socket) => {
     if(!banned){
     addElement(socket.id, name, id);
     io.emit('updateMemberList', userList);
-  }
+
+    messageList.forEach((messageObj) => {
+            socket.emit('chat message' , messageObj.msg , messageObj.name , messageObj.id , "0000");
+    });
+    }
+    //send message history
+
+
+
   });
 
 
@@ -266,5 +293,17 @@ function removeElement(socketID) {
   }
   if(index > -1) {
     userList.splice(index, 1);
+  }
+}
+
+function addToMessageHistory(messageObj){
+  if(messageList.length < 10){
+    messageList.push(messageObj);
+  }
+  else{
+    for(var i = 0 ;i < messageList.length-1;i++){
+      messageList[i] = messageList[i+1]
+    }
+    messageList[messageList.length-1] = messageObj;
   }
 }

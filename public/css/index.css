@@ -89,6 +89,16 @@ img{
   bottom: 0%;
 }
 
+.ccp{
+  font-family: 'Montserrat',sans-serif;
+  color:white;
+  font-weight: 100;
+  font-size: 0.8rem;
+  position: absolute;
+  bottom: 0%;
+  right:0.25%;
+}
+
 a,a:hover,a:visited{
   color: #1abc9c;
   text-decoration:none;

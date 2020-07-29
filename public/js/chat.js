@@ -5,8 +5,8 @@ var mutedUsers=  [];
 var toConnect = true;
 
 if(name === 'undefined') {
-  window.location.href = "https://jita.chat/auth";
-  toConnect=false;
+  //window.location.href = "https://jita.chat/auth";
+  //toConnect=false;
 }
 
 var startTime;
@@ -127,6 +127,12 @@ $(function() {
   socket.on('userDisconnected', function(socketID) {
     $('p:contains(' + socketID + ')').parents().eq(1).remove();
   })
+  socket.on('ban',function(socketID){
+    console.log('ban');
+    if(socket.id===socketID){
+    window.location.href="https://jita.chat/banned";
+    }
+  });
 });
 }
 
@@ -156,16 +162,13 @@ document.getElementById('m').addEventListener("paste", function(e) {
   }
 
   // insert text manually
-  $('#m').html(text);
+  var newText = $('#m').html() + text;
+  $('#m').html(newText);
 });
 
 function generateDiv(senderName, senderID, msg) {
   src = '';
-  if(senderID == 'admin') {
-    src = 'https://lh3.googleusercontent.com/proxy/DpKZ79F1J0xHlEdCyxvZSKsfS6bu7pEjWAX9LexWbqiVfWmyL9eONcNtijcVGMcvBWtQGqG1u7BoBA5o8j0E_q4aFhK2i2IYRfdi4ZRRy-aVr_b1E8IPRUVhRKlB3-kk5t86XHSKni3eMf0K7CY';
-  } else {
-    src = 'https://images.evetech.net/characters/' + senderID + '/portrait';
-  }
+  src = 'https://images.evetech.net/characters/' + senderID + '/portrait';
   report = {nameToReport:unescape(senderName),IDtoReport:senderID,message:msg};
   var div = '<div class="msg"><div><img class="potrait" src="' + src + '" /></div><div class="msgText"><p  style="white-space: pre-wrap"><a href="#" ondrag="onDrag(event)" class="name">' + unescape(senderName) + "</a><span class='report' onclick='reportUser(report)' title='Report Message'> !</span><span class='report' onclick='muteUser(report)' title='Mute Sender'> X</span> > <span class='normalText'>" + msg + '</span></p></div></div>';
   return div;
@@ -200,7 +203,7 @@ function drop(event) {
 
 function reportUser(report){
   if(unescape(name) === report.nameToReport){
-    alert("You cant report yourself");
+    alert("You can not report yourself");
     return;
   }
   var confirmed = confirm("Report Message?");
@@ -216,7 +219,7 @@ function reportUser(report){
 
 function muteUser(report){
   if(unescape(name) === report.nameToReport){
-    alert("You cant mute yourself");
+    alert("You can not mute yourself");
     return;
   }
   if(confirm('Mute '+report.nameToReport+" ?"))
