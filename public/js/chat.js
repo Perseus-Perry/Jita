@@ -10,8 +10,8 @@ var report;
 
 //REDIRECT TO LOGIN IF COOKIES NOT SET
 if(name === 'undefined') {
-  //window.location.href = "https://jita.chat/auth";
-  //toConnect=false;
+  window.location.href = "https://jita.chat/auth";
+  toConnect=false;
 }
 $('#m').focus();
 setInterval(sendPing, 1000); //time is in ms
@@ -239,7 +239,7 @@ function removeTags() {
 
 
 function getCookie(name) {
-  const value = "; ${document.cookie}";
-  const parts = value.split("; ${name}=");
-  if(parts.length === 2) return parts.pop().split(';').shift();
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
 }
